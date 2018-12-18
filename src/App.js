@@ -1,28 +1,52 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import store from './CatPicturesStore'
+import connect from './connect';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
-}
+const onChange = (event) => {
+  store.title = event.target.value
+};
+const ComponentOne = connect(store, ({title}) => (
+    <div>
+      <h2>Hello Form Component One</h2>
+      <div>{title}</div>
+      <input type="text" value={title}
+             onChange={onChange}/>
+    </div>
+));
+
+const ComponentTwo = connect(store, ({title}) => (
+    <div>
+      <h2>Hello Form Component Two</h2>
+      <div>{title}</div>
+      <input type="text" value={title}
+             onChange={onChange}/>
+    </div>
+));
+
+const ComponentThree = connect(store, ({fetchKitten}) => (
+    <div>
+      <h2>Hello Form Component Three</h2>
+      <button onClick={fetchKitten}>Press for Kitten</button>
+    </div>
+));
+
+const ComponentFour = connect(store, ({loading, kitten, error}) => (
+    <div>
+      <h2>Hello Form Component Four</h2>
+      <img style={{width: 300}} src={kitten} />
+      {loading && <div>Loading a kitten</div>}
+      {error && <div>Omg there was an error {error}</div>}
+    </div>
+));
+
+
+const App = () => (
+    <div>
+      <ComponentOne/>
+      <ComponentTwo/>
+      <ComponentThree/>
+      <ComponentFour />
+    </div>
+);
 
 export default App;
